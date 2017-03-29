@@ -43,15 +43,16 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
                         if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                            ball.Xping = 10;
+                            ball.Yping = -10;
+                            counter = counter + 1;
+                            currentXYTV.setText("" + counter);
 
-                            if ((event.getY() - ball.currentY) > 250 && (event.getY() - ball.currentY) < 330) {
+                            /*if ((event.getY() - ball.currentY) > 250 && (event.getY() - ball.currentY) < 330) {
                                 if ((event.getX() - ball.currentX) > 100 && (event.getX() - ball.currentX) < 200) {
-                                    ball.Xping = 10;
-                                    ball.Yping = -10;
-                                    counter = counter + 1;
-                                    currentXYTV.setText("" + counter);
+
                                 }
-                            }
+                            }*/
                         }
                         return true;
                     }
