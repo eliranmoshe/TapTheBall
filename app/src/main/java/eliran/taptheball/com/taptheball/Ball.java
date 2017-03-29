@@ -1,5 +1,6 @@
 package eliran.taptheball.com.taptheball;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -27,7 +28,8 @@ public class Ball extends View {
     public Ball(Context context) {
         super(context);
         thiscontext=context;
-        IitializeBall();
+        BallBmp = BitmapFactory.decodeResource(getResources(), R.drawable.balltwo);
+
     }
 
     public Ball(Context context, @Nullable AttributeSet attrs) {
@@ -37,7 +39,7 @@ public class Ball extends View {
 
     public void IitializeBall()
     {
-        BallBmp = BitmapFactory.decodeResource(getResources(), R.drawable.balltwo);
+
         handler = new Handler();
         final Runnable BallFall=new Runnable() {
             @Override

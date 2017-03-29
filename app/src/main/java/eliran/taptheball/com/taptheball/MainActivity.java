@@ -22,41 +22,39 @@ public class MainActivity extends AppCompatActivity {
     int counter = 0;
     Button StartBtn;
     FrameLayout FullFrameLauout;
+    StartFragment startfragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        IntentFilter intentfilter = new IntentFilter("eliran.taptheball.com.taptheball.HANDLER_STOP");
-        LocalBroadcastManager.getInstance(this).registerReceiver(new HandlerListener(), intentfilter);
-        StartBtn = (Button) findViewById(R.id.StartBtn);
-        FullFrameLauout = (FrameLayout) findViewById(R.id.FullFrameLauout);
+        IntentFilter Handlerfilter = new IntentFilter("eliran.taptheball.com.taptheball.HANDLER_STOP");
+        IntentFilter Startfilter = new IntentFilter("eliran.taptheball.com.taptheball.GAME_BEGIN");
+        HandlerListener hendlerlistener=new HandlerListener();
+        LocalBroadcastManager.getInstance(this).registerReceiver(hendlerlistener,Handlerfilter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(hendlerlistener,Startfilter);
+        startfragment=new StartFragment();
+        getFragmentManager().beginTransaction().replace(R.id.FullFrameLauout,startfragment).commit();
         currentXYTV = (TextView) findViewById(R.id.CurrentXYTV);
-        StartBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.setVisibility(View.INVISIBLE);
-                ball = new Ball(MainActivity.this);
-                FullFrameLauout.addView(ball);
+        currentXYTV.setVisibility(View.INVISIBLE);
+        //StartBtn = (Button) findViewById(R.id.StartBtn);
+       FullFrameLauout = (FrameLayout) findViewById(R.id.FullFrameLauout);
+
+
+
                 //ball = (Ball) findViewById(R.id.TheBallView);
-                ball.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                            ball.Xping = 10;
-                            ball.Yping = -10;
-                            counter = counter + 1;
-                            currentXYTV.setText("" + counter);
-
-                            /*if ((event.getY() - ball.currentY) > 250 && (event.getY() - ball.currentY) < 330) {
-                                if ((event.getX() - ball.currentX) > 100 && (event.getX() - ball.currentX) < 200) {
-
-                                }
-                            }*/
-                        }
-                        return true;
-                    }
-                });
+        ball = new Ball(MainActivity.this);
+        FullFrameLauout.addView(ball);
+        ball.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    ball.Xping = 10;
+                    ball.Yping = -10;
+                    counter = counter + 1;
+                    currentXYTV.setText("" + counter);
+                }
+                return true;
             }
         });
     }
@@ -65,9 +63,17 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            StartBtn.setVisibility(View.VISIBLE);
-            currentXYTV.setText("0");
-            counter=0;
+            if (intent.getAction().equals("eliran.taptheball.com.taptheball.HANDLER_STOP")) {
+                currentXYTV.setText("0");
+                counter = 0;
+                ball = new Ball(MainActivity.this);
+                FullFrameLauout.addView(ball);
+                getFragmentManager().beginTransaction().replace(R.id.FullFrameLauout,startfragment).commit();
+            }if (intent.getAction().equals("eliran.taptheball.com.taptheball.GAME_BEGIN")){
+
+                ball.IitializeBall();
+                currentXYTV.setVisibility(View.VISIBLE);
+            }
         }
     }
 }
