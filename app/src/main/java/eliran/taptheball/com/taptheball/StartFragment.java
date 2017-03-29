@@ -2,8 +2,10 @@ package eliran.taptheball.com.taptheball;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +19,9 @@ import android.widget.TextView;
  */
 public class StartFragment extends Fragment {
 
-Button StartBtn;
+    Button StartBtn;
     TextView RecordTV;
+    SharedPreferences preferences;
     public StartFragment() {
         // Required empty public constructor
     }
@@ -30,6 +33,9 @@ Button StartBtn;
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_start, container, false);
         RecordTV= (TextView) view.findViewById(R.id.RecordTV);
+        preferences= PreferenceManager.getDefaultSharedPreferences(getActivity());
+        int getscore=preferences.getInt("top score", 0);
+        RecordTV.setText("TOP SCORE : "+getscore);
         StartBtn= (Button) view.findViewById(R.id.StartBtn);
         StartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
