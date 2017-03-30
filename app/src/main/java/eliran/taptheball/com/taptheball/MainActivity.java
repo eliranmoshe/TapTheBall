@@ -25,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     FrameLayout FullFrameLauout;
     StartFragment startfragment;
     SharedPreferences preference;
+    int maxY;
+    int maxX;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +35,8 @@ public class MainActivity extends AppCompatActivity {
         Display mdisp = getWindowManager().getDefaultDisplay();
         Point mdispSize = new Point();
         mdisp.getSize(mdispSize);
-        int maxX = mdispSize.x;
-        int maxY = mdispSize.y;
+        maxX = mdispSize.x;
+        maxY = mdispSize.y;
         IntentFilter Handlerfilter = new IntentFilter("eliran.taptheball.com.taptheball.HANDLER_STOP");
         IntentFilter Startfilter = new IntentFilter("eliran.taptheball.com.taptheball.GAME_BEGIN");
         HandlerListener hendlerlistener=new HandlerListener();
@@ -57,33 +59,33 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    if (event.getY() >= 800&&ball.Yping==10){
+                    if (event.getY() >= (maxY/2)&&ball.DownYping==ball.Yping){
 
                         if (counter < 10) {
-                            if ((event.getY() - ball.currentY) < 300 && (event.getY() - ball.currentY) > 0) {
-                                if ((event.getX() - ball.currentX) < 300 && (event.getX() - ball.currentX) > 0) {
-                                    ball.Xping = 10;
-                                    ball.Yping = -10;
+                            if ((event.getY() - ball.currentY) < ball.LargeBallBmp.getHeight() && (event.getY() - ball.currentY) > 0) {
+                                if ((event.getX() - ball.currentX) < ball.LargeBallBmp.getWidth() && (event.getX() - ball.currentX) > 0) {
+                                    ball.Xping = ball.DownXping;
+                                    ball.Yping = ball.UpYping;
                                     counter = counter + 1;
                                     ball.counter = ball.counter + 1;
                                     currentXYTV.setText("" + counter);
                                 }
                             }
-                        } else if (counter >= 10) {
-                            if ((event.getY() - ball.currentY) < 200 && (event.getY() - ball.currentY) > 0) {
-                                if ((event.getX() - ball.currentX) < 200 && (event.getX() - ball.currentX) > 0) {
-                                    ball.Xping = 10;
-                                    ball.Yping = -10;
+                        } else if (counter >= 10&&counter<20) {
+                            if ((event.getY() - ball.currentY) < ball.MiddleBallBmp.getHeight() && (event.getY() - ball.currentY) > 0) {
+                                if ((event.getX() - ball.currentX) < ball.MiddleBallBmp.getWidth() && (event.getX() - ball.currentX) > 0) {
+                                    ball.Xping =  ball.DownXping;
+                                    ball.Yping= ball.UpYping;
                                     counter = counter + 1;
                                     ball.counter = ball.counter + 1;
                                     currentXYTV.setText("" + counter);
                                 }
                             }
                         } else if (counter >= 20) {
-                            if ((event.getY() - ball.currentY) < 100 && (event.getY() - ball.currentY) > 0) {
-                                if ((event.getX() - ball.currentX) < 100 && (event.getX() - ball.currentX) > 0) {
-                                    ball.Xping = 10;
-                                    ball.Yping = -10;
+                            if ((event.getY() - ball.currentY) < ball.SmallBallBmp.getHeight() && (event.getY() - ball.currentY) > 0) {
+                                if ((event.getX() - ball.currentX) < ball.SmallBallBmp.getWidth() && (event.getX() - ball.currentX) > 0) {
+                                    ball.Xping =  ball.DownXping;
+                                    ball.Yping= -ball.UpYping;
                                     counter = counter + 1;
                                     ball.counter = ball.counter + 1;
                                     currentXYTV.setText("" + counter);
@@ -112,7 +114,14 @@ public class MainActivity extends AppCompatActivity {
                 FullFrameLauout.addView(ball);
                 getFragmentManager().beginTransaction().replace(R.id.FullFrameLauout,startfragment).commit();
             }if (intent.getAction().equals("eliran.taptheball.com.taptheball.GAME_BEGIN")){
-
+                if (maxX<700&&maxY<1000){
+                    ball.DownXping=8;
+                    ball.DownYping=8;
+                    ball.UpXping=-8;
+                    ball.UpYping=-8;
+                }
+                ball.maxX=maxX;
+                ball.maxY=maxY;
                 ball.InitializeBall();
                 ball.InitializeLine();
                 currentXYTV.setVisibility(View.VISIBLE);

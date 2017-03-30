@@ -23,23 +23,28 @@ public class Ball extends View {
     public float currentY=0;
     public float currentX=290;
     Handler handler;
-    public float Yping=10;
-    public float Xping=-10;
+    public float DownYping=18;
+    public float DownXping=18;
+    public float UpXping=-18;
+    public float UpYping=-18;
+    float Yping=DownYping;
+    float Xping=DownXping;
     Context thiscontext;
-    Bitmap MiddleBallBmp;
-    Bitmap SmallBallBmp;
+    public Bitmap MiddleBallBmp;
+    public Bitmap SmallBallBmp;
     public Canvas thiscanvas;
     public int counter=0;
     Paint paint;
     Path path;
     boolean IsInitLine=false;
-
+    public  int maxX=0;
+    public int maxY=0;
     public Ball(Context context) {
         super(context);
         thiscontext=context;
         LargeBallBmp = BitmapFactory.decodeResource(getResources(), R.drawable.balltwo);
-        MiddleBallBmp=Bitmap.createScaledBitmap(LargeBallBmp,200,200,false);
-        SmallBallBmp=Bitmap.createScaledBitmap(LargeBallBmp,100,100,false);
+        MiddleBallBmp=Bitmap.createScaledBitmap(LargeBallBmp,LargeBallBmp.getWidth()/2,LargeBallBmp.getHeight()/2,false);
+        SmallBallBmp=Bitmap.createScaledBitmap(MiddleBallBmp,MiddleBallBmp.getWidth()/2,MiddleBallBmp.getHeight()/2,false);
 
 
 
@@ -66,32 +71,31 @@ public class Ball extends View {
         final Runnable BallFall=new Runnable() {
             @Override
             public void run() {
+
                 currentY=currentY+Yping;
                 currentX=currentX+Xping;
                 if (counter<10){
-                if (currentX==770)
+                if (currentX>(maxX-LargeBallBmp.getWidth()))
                 {
-                    Xping=-10;
+                    Xping=UpXping;
                 }}else if (counter>=10&&counter<20){
-                    if (currentX==870)
+                    if (currentX>(maxX-MiddleBallBmp.getWidth()))
                     {
-                        Xping=-10;
-                    }
-                }else if (counter>=20)
-                {
-                    if (currentX==970)
+                        Xping=UpXping;
+                    }}else if (counter>=20) {
+                    if (currentX>(maxX-SmallBallBmp.getWidth()))
                     {
-                        Xping=-10;
+                        Xping=UpXping;
                     }
                 }
-                if (currentY==0)
+                if (currentY<0)
                 {
-                    Yping=10;
-                }if (currentX==0)
+                    Yping=DownYping;
+                }if (currentX<0)
                 {
-                    Xping=10;
+                    Xping=DownXping;
                 }
-                if (currentY<1685)
+                if (currentY<maxY)
                 {
                     handler.postDelayed(this,1);
 
@@ -108,14 +112,16 @@ public class Ball extends View {
                  invalidate();
             }
         };
+        Xping=DownXping;
+        Yping=DownYping;
         handler.postDelayed(BallFall,1);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         if (IsInitLine) {
-            path.moveTo(0, 800);
-            path.lineTo(1100, 800);
+            path.moveTo(0, (maxY/2));
+            path.lineTo(maxX, (maxY/2));
             canvas.drawPath(path,paint);
         }
         thiscanvas=canvas;
