@@ -43,6 +43,7 @@ public class Ball extends View {
         super(context);
         thiscontext=context;
         LargeBallBmp = BitmapFactory.decodeResource(getResources(), R.drawable.balltwo);
+        int a=LargeBallBmp.getWidth();
         MiddleBallBmp=Bitmap.createScaledBitmap(LargeBallBmp,LargeBallBmp.getWidth()*3/4,LargeBallBmp.getHeight()*3/4,false);
         SmallBallBmp=Bitmap.createScaledBitmap(MiddleBallBmp,MiddleBallBmp.getWidth()*3/4,MiddleBallBmp.getHeight()*3/4,false);
 

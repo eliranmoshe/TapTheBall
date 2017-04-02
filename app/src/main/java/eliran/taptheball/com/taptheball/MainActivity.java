@@ -14,6 +14,9 @@ import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences preference;
     int maxY;
     int maxX;
+  //  private RotateAnimation rotate = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,12 @@ public class MainActivity extends AppCompatActivity {
         mdisp.getSize(mdispSize);
         maxX = mdispSize.x;
         maxY = mdispSize.y;
+       /* rotate = new RotateAnimation(0f, 360f, Animation.ABSOLUTE,
+                0.5f, Animation.ABSOLUTE, 0.5f);
+        rotate.setInterpolator(new LinearInterpolator());
+        rotate.setDuration(1500);
+        rotate.setRepeatMode(Animation.RESTART);
+        rotate.setRepeatCount(Animation.INFINITE);*/
         IntentFilter Handlerfilter = new IntentFilter("eliran.taptheball.com.taptheball.HANDLER_STOP");
         IntentFilter Startfilter = new IntentFilter("eliran.taptheball.com.taptheball.GAME_BEGIN");
         HandlerListener hendlerlistener=new HandlerListener();
@@ -62,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //ball = (Ball) findViewById(R.id.TheBallView);
         ball = new Ball(MainActivity.this);
+       // ball.startAnimation(rotate);
         FullFrameLauout.addView(ball);
         ball.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -71,8 +82,15 @@ public class MainActivity extends AppCompatActivity {
 
                         if (counter < 10) {
                             if ((event.getY() - ball.currentY) < ball.LargeBallBmp.getHeight() && (event.getY() - ball.currentY) > 0) {
+                                float a=event.getX() - ball.currentX;
+                                float b=ball.LargeBallBmp.getWidth();
+                                float sum=b-a;
                                 if ((event.getX() - ball.currentX) < ball.LargeBallBmp.getWidth() && (event.getX() - ball.currentX) > 0) {
-                                    ball.Xping = ball.DownXping;
+                                    if (sum>=ball.LargeBallBmp.getWidth()/2) {
+                                        ball.Xping = ball.DownXping;
+                                    }else{
+                                        ball.Xping=ball.UpXping;
+                                    }
                                     ball.Yping = ball.UpYping;
                                     counter = counter + 1;
                                     ball.counter = ball.counter + 1;
@@ -82,7 +100,11 @@ public class MainActivity extends AppCompatActivity {
                         } else if (counter >= 10&&counter<20) {
                             if ((event.getY() - ball.currentY) < ball.MiddleBallBmp.getHeight() && (event.getY() - ball.currentY) > 0) {
                                 if ((event.getX() - ball.currentX) < ball.MiddleBallBmp.getWidth() && (event.getX() - ball.currentX) > 0) {
-                                    ball.Xping =  ball.DownXping;
+                                    if (ball.MiddleBallBmp.getWidth()/2>(event.getX() - ball.currentX)) {
+                                        ball.Xping = ball.DownXping;
+                                    }else {
+                                        ball.Xping=ball.UpXping;
+                                    }
                                     ball.Yping= ball.UpYping;
                                     counter = counter + 1;
                                     ball.counter = ball.counter + 1;
@@ -92,8 +114,9 @@ public class MainActivity extends AppCompatActivity {
                         } else if (counter >= 20) {
                             if ((event.getY() - ball.currentY) < ball.SmallBallBmp.getHeight() && (event.getY() - ball.currentY) > 0) {
                                 if ((event.getX() - ball.currentX) < ball.SmallBallBmp.getWidth() && (event.getX() - ball.currentX) > 0) {
-                                    ball.Xping =  ball.DownXping;
-                                    ball.Yping= -ball.UpYping;
+                                    if (ball.SmallBallBmp.getWidth()/2>=(event.getX() - ball.currentX)){
+                                    ball.Xping =  ball.DownXping;}else { ball.Xping=ball.UpXping;}
+                                    ball.Yping= ball.UpYping;
                                     counter = counter + 1;
                                     ball.counter = ball.counter + 1;
                                     currentXYTV.setText("" + counter);
