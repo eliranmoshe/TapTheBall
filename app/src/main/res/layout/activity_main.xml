@@ -22,7 +22,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_gravity="bottom"
+        android:layout_gravity="bottom|center_horizontal"
+        android:elevation="3dp"
+
         ads:adSize="BANNER"
         ads:adUnitId="@string/banner_ad_unit_id"></com.google.android.gms.ads.AdView>
 

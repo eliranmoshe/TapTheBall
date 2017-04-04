@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences preference;
     int maxY;
     int maxX;
+    AdView mAdView;
   //  private RotateAnimation rotate = null;
 
     @Override
@@ -41,9 +42,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         MobileAds.initialize(this,"ca-app-pub-6655727907980016/1019147687");
-        AdView mAdView = (AdView) findViewById(R.id.adView);
+        mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+        mAdView.bringToFront();
+
         Display mdisp = getWindowManager().getDefaultDisplay();
         Point mdispSize = new Point();
         mdisp.getSize(mdispSize);
@@ -143,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
                 counter = 0;
                 ball = new Ball(MainActivity.this);
                 FullFrameLauout.addView(ball);
+                ball.setBottom(mAdView.getTop());
                 getFragmentManager().beginTransaction().replace(R.id.FullFrameLauout,startfragment).commit();
             }if (intent.getAction().equals("eliran.taptheball.com.taptheball.GAME_BEGIN")){
                 if (maxX<700&&maxY<1000){
