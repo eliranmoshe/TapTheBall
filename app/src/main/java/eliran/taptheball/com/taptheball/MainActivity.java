@@ -47,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
         mAdView.loadAd(adRequest);
         mAdView.bringToFront();
 
+
+
+
+
         Display mdisp = getWindowManager().getDefaultDisplay();
         Point mdispSize = new Point();
         mdisp.getSize(mdispSize);
