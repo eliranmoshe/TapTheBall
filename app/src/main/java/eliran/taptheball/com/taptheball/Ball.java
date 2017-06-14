@@ -41,6 +41,7 @@ public class Ball extends View {
     public int maxY=0;
     public Ball(Context context) {
         super(context);
+        //initialize the all 3 kind of ball by size
         thiscontext=context;
         LargeBallBmp = BitmapFactory.decodeResource(getResources(), R.drawable.balltwo);
         int a=LargeBallBmp.getWidth();
@@ -58,6 +59,7 @@ public class Ball extends View {
 
     }
     public void InitializeLine(){
+        //set the limit line that the user can touch the ball
         IsInitLine=true;
         paint= new Paint();
         paint.setColor(Color.GRAY);
@@ -68,6 +70,7 @@ public class Ball extends View {
     }
     public void InitializeBall()
     {
+        //start the ball movement
         handler = new Handler();
         final Runnable BallFall=new Runnable() {
             @Override
@@ -101,6 +104,7 @@ public class Ball extends View {
                     handler.postDelayed(this,1);
 
                 }else {
+                    //if the ball falls from the ended Y the handler is stop and send broadcast
                     Intent intent=new Intent("eliran.taptheball.com.taptheball.HANDLER_STOP");
                     LocalBroadcastManager.getInstance(thiscontext).sendBroadcast(intent);
                     handler.removeCallbacks(this);
@@ -120,6 +124,7 @@ public class Ball extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        //draw the custom ball view all the time that the handler is running
         if (IsInitLine) {
             path.moveTo(0, (maxY/2));
             path.lineTo(maxX, (maxY/2));
