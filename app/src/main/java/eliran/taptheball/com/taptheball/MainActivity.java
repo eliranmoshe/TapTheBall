@@ -35,13 +35,12 @@ public class MainActivity extends AppCompatActivity {
     int maxY;
     int maxX;
     AdView mAdView;
-    //  private RotateAnimation rotate = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // addMob Add's Functions
+        /////////// addMob Add's Functions
         MobileAds.initialize(this, "ca-app-pub-6655727907980016/1019147687");
         mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
@@ -49,29 +48,29 @@ public class MainActivity extends AppCompatActivity {
         mAdView.bringToFront();
 
 
-        //get device dis[lay data
+        /////////get device dis[lay data
         Display mdisp = getWindowManager().getDefaultDisplay();
         Point mdispSize = new Point();
         mdisp.getSize(mdispSize);
         maxX = mdispSize.x;
         maxY = mdispSize.y;
-        //listening to Broadcast
+        ////////////listening to Broadcast
         IntentFilter Handlerfilter = new IntentFilter("eliran.taptheball.com.taptheball.HANDLER_STOP");
         IntentFilter Startfilter = new IntentFilter("eliran.taptheball.com.taptheball.GAME_BEGIN");
         HandlerListener hendlerlistener = new HandlerListener();
         LocalBroadcastManager.getInstance(this).registerReceiver(hendlerlistener, Handlerfilter);
         LocalBroadcastManager.getInstance(this).registerReceiver(hendlerlistener, Startfilter);
-        //get the high score from preference
+        ////////////get the high score from preference
         preference = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         startfragment = new StartFragment();
         getFragmentManager().beginTransaction().replace(R.id.FullFrameLauout, startfragment).commit();
         currentXYTV = (TextView) findViewById(R.id.CurrentXYTV);
         currentXYTV.setVisibility(View.INVISIBLE);
-        //StartBtn = (Button) findViewById(R.id.StartBtn);
+        /////////////StartBtn = (Button) findViewById(R.id.StartBtn);
         FullFrameLauout = (FrameLayout) findViewById(R.id.FullFrameLauout);
 
 
-        //declare the custom ball view
+        /////////////declare the custom ball view
         ball = new Ball(MainActivity.this);
         FullFrameLauout.addView(ball);
         ball.setOnTouchListener(new View.OnTouchListener() {
@@ -79,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     if (event.getY() >= (maxY / 2) && ball.DownYping == ball.Yping) {
-                        //while the user touch the ball limits the view goes up
+                       ////////////while the user touch the ball limits the view goes up
                         if (counter < 10) {
                             if ((event.getY() - ball.currentY) < ball.LargeBallBmp.getHeight() && (event.getY() - ball.currentY) > 0) {
                                 float a = event.getX() - ball.currentX;
@@ -97,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                                     currentXYTV.setText("" + counter);
                                 }
                             }
-                            //minimize the ball radius
+                            ///////////minimize the ball radius
                         } else if (counter >= 10 && counter < 20) {
                             if ((event.getY() - ball.currentY) < ball.MiddleBallBmp.getHeight() && (event.getY() - ball.currentY) > 0) {
                                 if ((event.getX() - ball.currentX) < ball.MiddleBallBmp.getWidth() && (event.getX() - ball.currentX) > 0) {
@@ -139,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals("eliran.taptheball.com.taptheball.HANDLER_STOP")) {
-                //if the current turn of game stop and the user fail
+                //////////if the current turn of game stop and the user fail
                 int top = preference.getInt("top score", counter);
                 if (counter >= top) {
                     preference.edit().putInt("top score", counter).commit();
@@ -152,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                 getFragmentManager().beginTransaction().replace(R.id.FullFrameLauout, startfragment).commit();
             }
             if (intent.getAction().equals("eliran.taptheball.com.taptheball.GAME_BEGIN")) {
-                //initialize the custom ball view to start another turn
+                ////////////initialize the custom ball view to start another turn
                 if (maxX < 700 && maxY < 1000) {
                     ball.DownXping = 8;
                     ball.DownYping = 8;

@@ -23,15 +23,15 @@ public class StartFragment extends Fragment {
     TextView RecordTV;
     SharedPreferences preferences;
     public StartFragment() {
-        // Required empty public constructor
+        ///// Required empty public constructor
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        //show a start game fragment
+        ////// Inflate the layout for this fragment
+        ////////////////show a start game fragment
         View view=inflater.inflate(R.layout.fragment_start, container, false);
         RecordTV= (TextView) view.findViewById(R.id.RecordTV);
         preferences= PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -41,7 +41,7 @@ public class StartFragment extends Fragment {
         StartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //start the game by broadcast
+               /////////////start the game by broadcast
                 Intent intent=new Intent("eliran.taptheball.com.taptheball.GAME_BEGIN");
                 LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
                 getActivity().getFragmentManager().beginTransaction().remove(StartFragment.this).commit();
